@@ -34,12 +34,10 @@ dependencies {
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    //+  kvs  2020.03.18  room was added
+
     def room_version = "2.2.4"
     implementation "androidx.room:room-runtime:$room_version"
-    // optional - RxJava support for Room
     implementation "androidx.room:room-rxjava2:$room_version"
-    // Test helpers
     testImplementation "androidx.room:room-testing:$room_version"
-    //-  kvs  2020.03.18
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
 }
