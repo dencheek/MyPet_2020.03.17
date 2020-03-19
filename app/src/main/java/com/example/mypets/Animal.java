@@ -1,4 +1,5 @@
 package com.example.mypets;
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -6,8 +7,8 @@ import androidx.room.PrimaryKey;
 @Entity
 public class Animal {
     @PrimaryKey private int id;
-    @ColumnInfo(name = "Animal") private String Animal;
-    @ColumnInfo(name = "Name") private String Name;
+    @ColumnInfo(name = "Animal") @NonNull private String Animal;
+    @ColumnInfo(name = "Name") @NonNull private String Name;
     public int getId() {return id;}
     public String getAnimal() {return Animal;}
     public void setAnimal(String Animal) {this.Animal = Animal;}
