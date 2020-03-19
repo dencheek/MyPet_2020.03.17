@@ -22,9 +22,9 @@ public class Animal {
 
     public static Animal[] populateData() {
         return new Animal[] {
-                 new Animal ("Кот","Василий")
-                ,new Animal ("Собака","Барбос")
-                ,new Animal ("Лиса","Алиса")
+                 new Animal ("Кот",     "Василий")
+                ,new Animal ("Собака",  "Барбос")
+                ,new Animal ("Лиса",    "Алиса")
                 ,new Animal ("Черепаха","Вениамин")
                 ,new Animal ("Крокодил","Гена")
         };
