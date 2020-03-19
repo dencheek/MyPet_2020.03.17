@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey;
 public class Animal {
     @PrimaryKey private int id;
     @ColumnInfo(name = "Animal") @NonNull private String Animal;
-    @ColumnInfo(name = "Name") @NonNull private String Name;
+    @ColumnInfo(name = "Name")   @NonNull private String Name;
 
     public Animal (String Animal, String Name) {
         this.Animal = Animal;
