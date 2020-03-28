@@ -1,84 +1,65 @@
 package com.example.mypets;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
-    private String[] mDataset;
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView textView;
-        public MyViewHolder(TextView v) {
-            super(v);
-            textView = v;
-        }
-    }
-    public MyAdapter(String [] myDataset) {
-        mDataset = myDataset;
-    }
+    // если че лучше ArrayList юзай, а не массив, хотя это дело вкуса
+    private List<Animal> animals = new ArrayList<>();
+
+    // в этом методе знакомишь адаптер с вьюхой каждого элемента списка
+    // т.е. дата в каждом элементе списка разная, но вьюха одна и та же
+    // плюс оборачиваешь во вью холдер, у этой схемы давняя история, пока не заморачивайся почему именно так сделано,
+    // потом на словах расскажу
     @Override
     public MyAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        TextView v = (TextView) LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.my_recycler_view, parent, false);
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_view, parent, false);
 
         MyViewHolder vh = new MyViewHolder(v);
         return vh;
     }
+
+    // здесь мы даем каждой вьюхе данные из массива
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        holder.textView.setText(mDataset[position]);
+        // position - порядковый номер каждого элемента списка возвращает сам адаптер, мы не паримся с этим вопросом
+        // и по нему из списка animals мы получаем конкретный Animal для каждой позиции
+        Animal animal = animals.get(position);
+        holder.tvAnimal.setText(animal.getAnimal());
+        holder.tvName.setText(animal.getName());
     }
+
+    // это неоптимальная схема, в больших прилках нужно делать через DiffUtil, чтобы не вся дата обновилась, а только изменения
+    public void setData(List<Animal> newAnimals) {
+        // очищаем
+        animals.clear();
+        // добавляем
+        animals.addAll(newAnimals);
+        // говорим адаптеру, что есть новая дата - перезагрузись
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemCount() {
-        return mDataset.length;
+        return animals.size();
     }
-}
-/*
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
-    private String[] mDataset;
 
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in this case
-        public TextView textView;
-        public MyViewHolder(TextView v) {
+        public TextView tvAnimal;
+        public TextView tvName;
+
+        public MyViewHolder(View v) {
             super(v);
-            textView = v;
+            // здесь получаем ссылки на все TextView во вьюхе для списка (та которая item_view в папке res/layout)
+            // потом эти ссылки заюзаем в методе onBindViewHolder
+            tvAnimal = v.findViewById(R.id.tv_animal);
+            tvName = v.findViewById(R.id.tv_name);
         }
     }
-
-    // Provide a suitable constructor (depends on the kind of dataset)
-    public MyAdapter(String[] myDataset) {
-        mDataset = myDataset;
-    }
-
-    // Create new views (invoked by the layout manager)
-    @Override
-    public MyAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent,
-                                                     int viewType) {
-        // create a new view
-        TextView v = (TextView) LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.my_text_view, parent, false);
-        ...
-        MyViewHolder vh = new MyViewHolder(v);
-        return vh;
-    }
-
-    // Replace the contents of a view (invoked by the layout manager)
-    @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
-        holder.textView.setText(mDataset[position]);
-
-    }
-
-    // Return the size of your dataset (invoked by the layout manager)
-    @Override
-    public int getItemCount() {
-        return mDataset.length;
-    }
 }
-*/

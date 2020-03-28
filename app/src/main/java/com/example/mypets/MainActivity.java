@@ -1,50 +1,35 @@
 package com.example.mypets;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
-import android.annotation.SuppressLint;
-import android.app.Activity;
+
 import android.os.Bundle;
-/
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
-    private RecyclerView recyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager layoutManager;
-
-    @SuppressLint("ResourceType")
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.my_activity);//activity_main);
-        recyclerView = (RecyclerView) findViewById(R.layout.my_recycler_view);
-
-        mAdapter = new MyAdapter(myDataset);
-        recyclerView.setAdapter(mAdapter);
-    }
-}
-/*
-public class MyActivity extends Activity {
-    private RecyclerView recyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.my_activity);
-        recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        setContentView(R.layout.activity_main);
 
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
-        recyclerView.setHasFixedSize(true);
+        RecyclerView recyclerView = findViewById(R.id.rv_main);
+        // передаем в recyclerView лэйаут менеджер, иначе он работать не будет
+        // layoutManager'у нужен контекст, в нашем случае это this (полиморфизм)
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // use a linear layout manager
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-
-        // specify an adapter (see also next example)
-        mAdapter = new MyAdapter(myDataset);
+        final MyAdapter mAdapter = new MyAdapter(); // делаем константой, чтоб с другого треда обращаться (ниже в onChanged)
         recyclerView.setAdapter(mAdapter);
+
+        // всю требуху описали, теперь можно передать из базы информацию
+        AppDatabase.getInstance(this).animalDao().getAll().observe(this, new Observer<List<Animal>>() {
+            @Override
+            public void onChanged(List<Animal> animals) {
+                mAdapter.setData(animals);
+            }
+        });
     }
-    // ...
 }
-*/
